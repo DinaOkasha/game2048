@@ -19,7 +19,7 @@ jobs:
         run: zip -r game2048.zip .
 
       - name: Set up AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::851725518898:role/GitHubActionsRoleOICD # Replace with your IAM role ARN
           aws-region: eu-west-1
