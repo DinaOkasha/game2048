@@ -22,14 +22,11 @@ jobs:
         id: configure-aws-credentials 
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::851725518898:role/GitHubActionsRoleOICD # Replace with your IAM role ARN
+          role-to-assume: arn:aws:iam::851725518898:role/testroleforebs # Replace with your IAM role ARN
           aws-region: eu-west-1
 
       - name: Test AWS credentials
-        run: aws s3 ls --region eu-west-1  
-
-      - name: Save OIDC token to a file (token.txt)
-        run: echo ${{ steps.configure-aws-credentials.outputs.token }} > token.txt
+        run: aws s3 ls --region eu-west-1 
       
       
       - name: Deploy to EB
@@ -40,8 +37,8 @@ jobs:
           version_label: ${{ github.sha }}
           deployment_package: game2048.zip
           region: eu-west-1
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          # aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          # aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 
 
