@@ -1,0 +1,36 @@
+name: CICD
+
+on:
+    push:
+      branches:
+      - 'dev'
+
+jobs:
+  build-and-deploy-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out code
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: install dependencies
+        run: npm install
+
+      - name: generate zip file
+        run: zip -r game2048.zip .
+
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           application_name: Game2048
+           environment_name: Game2048-env
+           version_label: $(date +%Y%m%d%H%M%S)
+           region: es-west-1
+           deployment_package: game2048.zip
