@@ -25,9 +25,11 @@ jobs:
           aws-region: eu-west-1
 
       - name: Test AWS credentials
-        run: aws s3 ls --region eu-west-1   
-      - name: Get OIDC token
-        run: echo ${{ steps.auth.outputs.token }} > token.txt
+        run: aws s3 ls --region eu-west-1  
+         
+      - name: Save OIDC token to a file (token.txt)
+        run: echo ${{ steps.configure-aws-credentials.outputs.token }} > token.txt
+      
       
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
