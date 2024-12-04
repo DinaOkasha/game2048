@@ -4,13 +4,15 @@ on:
     push:
       branches:
       - 'dev'
-permissions:
-  id-token: write  
-  contents: read   
+  
 
 jobs:
   build-and-deploy-job:
     runs-on: ubuntu-latest
+    
+    permissions:
+      id-token: write  
+      contents: read 
     steps:
       - name: check out code
         uses: actions/checkout@v4
