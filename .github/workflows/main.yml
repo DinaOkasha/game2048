@@ -29,20 +29,30 @@ jobs:
         run: aws s3 ls --region eu-west-1 
       
       
-      - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v22
-        with:
-          application_name: 'my-game-app'
-          environment_name: 'My-game-app-env'
-          version_label: ${{ github.sha }}
-          deployment_package: game2048.zip
-          region: eu-west-1
+      # - name: Deploy to EB
+      #   uses: einaregilsson/beanstalk-deploy@v22
+      #   with:
+      #     application_name: 'my-game-app'
+      #     environment_name: 'My-game-app-env'
+      #     version_label: ${{ github.sha }}
+      #     deployment_package: game2048.zip
+      #     region: eu-west-1
           # aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           # aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 
 
-
+      - name: Deploy to EB
+        run: |
+            npx beanstalk-deploy \
+              -a my-game-app \
+              -e My-game-app-env \
+              -l ${{ github.sha }} \
+              -r eu-west-1 \
+              -s game2048.zip
+        env:
+            AWS_REGION: eu-west-1
+            AWS_DEFAULT_REGION: eu-west-1
 
 
 
