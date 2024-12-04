@@ -44,14 +44,17 @@ jobs:
 
       - name: Deploy to EB
         run: |
-            npx beanstalk-deploy \
-              -a my-game-app \
-              -e My-game-app-env \
-              -l ${{ github.sha }} \
-              -r eu-west-1 \
-              -s game2048.zip
-      
-
+        
+          aws elasticbeanstalk create-application-version \
+            --application-name my-game-app \
+            --version-label ${{ github.sha }} \
+            --source-bundle "{\"S3Bucket\": \"\", \"S3Key\": \"game2048.zip\"}" \
+            --region eu-west-1
+          
+          aws elasticbeanstalk update-environment \
+            --environment-name My-game-app-env \
+            --version-label ${{ github.sha }} \
+            --region eu-west-1
 
 
 
