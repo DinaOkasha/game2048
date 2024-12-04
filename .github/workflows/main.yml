@@ -19,11 +19,11 @@ jobs:
       - name: generate zip file
         run: zip -r game2048.zip .
       
-      - name: Set up AWS credentials using OIDC
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::851725518898:role/github_OICD
-          aws-region: eu-west-1
+      # - name: Set up AWS credentials using OIDC
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: arn:aws:iam::851725518898:role/github_OICD
+      #     aws-region: eu-west-1
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
@@ -31,8 +31,8 @@ jobs:
        
            application_name: 'my-game-app'
            environment_name: 'My-game-app-env'
-           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
            version_label: ${{ github.sha }}
            region: eu-west-1
            deployment_package: game2048.zip
