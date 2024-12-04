@@ -1,29 +1,100 @@
 name: CICD
 
 on:
-    push:
-      branches:
+  push:
+    branches:
       - 'dev'
 
 jobs:
   build-and-deploy-job:
     runs-on: ubuntu-latest
     steps:
-      - name: check out code
+      - name: Check out code
         uses: actions/checkout@v4
 
-      - name: generate zip file
+      - name: Generate zip file
         run: zip -r game2048.zip .
-      
+
+      - name: Set up AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::851725518898:role/GitHubActionsRoleOICD # Replace with your IAM role ARN
+          aws-region: eu-west-1
+
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
         with:
+          application_name: 'my-game-app'
+          environment_name: 'My-game-app-env'
+          version_label: ${{ github.sha }}
+          deployment_package: game2048.zip
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: CICD
+
+# on:
+#     push:
+#       branches:
+#       - 'dev'
+
+# jobs:
+#   build-and-deploy-job:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: check out code
+#         uses: actions/checkout@v4
+
+#       - name: generate zip file
+#         run: zip -r game2048.zip .
+      
+#       - name: Deploy to EB
+#         uses: einaregilsson/beanstalk-deploy@v22
+#         with:
        
-           application_name: 'my-game-app'
-           environment_name: 'My-game-app-env'
-           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           version_label: ${{ github.sha }}
-           region: eu-west-1
-           deployment_package: game2048.zip
+#            application_name: 'my-game-app'
+#            environment_name: 'My-game-app-env'
+#            aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#            aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#            version_label: ${{ github.sha }}
+#            region: eu-west-1
+#            deployment_package: game2048.zip
         
