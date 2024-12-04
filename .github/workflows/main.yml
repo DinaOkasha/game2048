@@ -1,29 +1,96 @@
+
 name: CICD
 
 on:
-    push:
-      branches:
+  push:
+    branches:
       - 'dev'
+permissions:
+  id-token: write   
+  contents: read 
 
 jobs:
   build-and-deploy-job:
     runs-on: ubuntu-latest
     steps:
-      - name: check out code
+      - name: Check out code
         uses: actions/checkout@v4
 
-      - name: generate zip file
+      - name: Generate zip file
         run: zip -r game2048.zip .
-      
-      - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v22
+
+      - name: Set up AWS credentials using OIDC
+        id: configure-aws-credentials 
+        uses: aws-actions/configure-aws-credentials@v4
         with:
+          role-to-assume: arn:aws:iam::851725518898:role/testroleforebs # Replace with your IAM role ARN
+          aws-region: eu-west-1
+
+      - name: Test AWS credentials
+        run: aws s3 ls --region eu-west-1 
+
+
+      - name: Upload zip file to S3
+        run: |
+          aws s3 cp game2048.zip s3://elasticbeanstalk-eu-west-1-851725518898/game2048.zip --region eu-west-1
+
+      - name: Create Elastic Beanstalk application version
+        run: |
+          aws elasticbeanstalk create-application-version \
+            --application-name my-game-app \
+            --version-label ${{ github.sha }} \
+            --source-bundle "{\"S3Bucket\": \"elasticbeanstalk-eu-west-1-851725518898\", \"S3Key\": \"game2048.zip\"}" \
+            --region eu-west-1
+          
+      - name: Update Elastic Beanstalk environment
+        run: |
+          aws elasticbeanstalk update-environment \
+            --environment-name My-game-app-env \
+            --version-label ${{ github.sha }} \
+            --region eu-west-1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: CICD
+
+# on:
+#     push:
+#       branches:
+#       - 'dev'
+
+# jobs:
+#   build-and-deploy-job:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: check out code
+#         uses: actions/checkout@v4
+
+#       - name: generate zip file
+#         run: zip -r game2048.zip .
+      
+#       - name: Deploy to EB
+#         uses: einaregilsson/beanstalk-deploy@v22
+#         with:
        
-           application_name: 'my-game-app'
-           environment_name: 'My-game-app-env'
-           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           version_label: ${{ github.sha }}
-           region: eu-west-1
-           deployment_package: game2048.zip
+#            application_name: 'my-game-app'
+#            environment_name: 'My-game-app-env'
+#            aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#            aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#            version_label: ${{ github.sha }}
+#            region: eu-west-1
+#            deployment_package: game2048.zip
         
