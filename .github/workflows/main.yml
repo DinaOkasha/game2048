@@ -27,6 +27,26 @@ jobs:
 
       - name: Test AWS credentials
         run: aws s3 ls --region eu-west-1 
+
+
+      - name: Upload zip file to S3
+        run: |
+          aws s3 cp game2048.zip s3://elasticbeanstalk-eu-west-1-851725518898/game2048.zip --region eu-west-1
+
+      - name: Create Elastic Beanstalk application version
+        run: |
+          aws elasticbeanstalk create-application-version \
+            --application-name my-game-app \
+            --version-label ${{ github.sha }} \
+            --source-bundle "{\"S3Bucket\": \"elasticbeanstalk-eu-west-1-851725518898\", \"S3Key\": \"game2048.zip\"}" \
+            --region eu-west-1
+          
+      - name: Update Elastic Beanstalk environment
+        run: |
+          aws elasticbeanstalk update-environment \
+            --environment-name My-game-app-env \
+            --version-label ${{ github.sha }} \
+            --region eu-west-1
       
       
       # - name: Deploy to EB
@@ -42,19 +62,19 @@ jobs:
 
 
 
-      - name: Deploy to EB
-        run: |
+      # - name: Deploy to EB
+      #   run: |
         
-          aws elasticbeanstalk create-application-version \
-            --application-name my-game-app \
-            --version-label ${{ github.sha }} \
-            --source-bundle "{\"S3Bucket\": \"\", \"S3Key\": \"game2048.zip\"}" \
-            --region eu-west-1
+      #     aws elasticbeanstalk create-application-version \
+      #       --application-name my-game-app \
+      #       --version-label ${{ github.sha }} \
+      #       --source-bundle "{\"S3Bucket\": \"\", \"S3Key\": \"game2048.zip\"}" \
+      #       --region eu-west-1
           
-          aws elasticbeanstalk update-environment \
-            --environment-name My-game-app-env \
-            --version-label ${{ github.sha }} \
-            --region eu-west-1
+      #     aws elasticbeanstalk update-environment \
+      #       --environment-name My-game-app-env \
+      #       --version-label ${{ github.sha }} \
+      #       --region eu-west-1
 
 
 
