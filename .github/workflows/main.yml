@@ -22,8 +22,8 @@ jobs:
       - name: Set up AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-arn: arn:aws:iam::851725518898:role/github_OICD
-          region: eu-west-1
+          role-to-assume: arn:aws:iam::851725518898:role/github_OICD
+          aws-region: eu-west-1
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
