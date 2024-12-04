@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - 'dev'
-
+permissions:
+  id-token: write   # Allow the workflow to request the JWT
+  contents: read 
+  
 jobs:
   build-and-deploy-job:
     runs-on: ubuntu-latest
