@@ -32,5 +32,5 @@ jobs:
            application_name: Game2048
            environment_name: Game2048-env
            version_label: $(date +%Y%m%d%H%M%S)
-           region: es-west-1
+           region: eu-west-1
            deployment_package: game2048.zip
