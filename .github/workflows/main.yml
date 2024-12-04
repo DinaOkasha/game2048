@@ -25,6 +25,13 @@ jobs:
           role-to-assume: arn:aws:iam::851725518898:role/github_OICD
           aws-region: eu-west-1
 
+      - name: Export AWS credentials
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ steps.aws-credentials.outputs.aws-access-key-id }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ steps.aws-credentials.outputs.aws-secret-access-key }}" >> $GITHUB_ENV
+          echo "AWS_SESSION_TOKEN=${{ steps.aws-credentials.outputs.aws-session-token }}" >> $GITHUB_ENV
+        
+
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
         with:
