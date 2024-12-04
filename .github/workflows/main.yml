@@ -24,6 +24,9 @@ jobs:
           role-to-assume: arn:aws:iam::851725518898:role/GitHubActionsRoleOICD # Replace with your IAM role ARN
           aws-region: eu-west-1
 
+      - name: Test AWS credentials
+        run: aws s3 ls --region eu-west-1   
+
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
         with:
