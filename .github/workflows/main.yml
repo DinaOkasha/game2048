@@ -19,6 +19,7 @@ jobs:
         run: zip -r game2048.zip .
 
       - name: Set up AWS credentials using OIDC
+        id: configure-aws-credentials 
         uses: aws-actions/configure-aws-credentials@v1
         with:
           role-to-assume: arn:aws:iam::851725518898:role/GitHubActionsRoleOICD # Replace with your IAM role ARN
@@ -26,7 +27,7 @@ jobs:
 
       - name: Test AWS credentials
         run: aws s3 ls --region eu-west-1  
-         
+
       - name: Save OIDC token to a file (token.txt)
         run: echo ${{ steps.configure-aws-credentials.outputs.token }} > token.txt
       
