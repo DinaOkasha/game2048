@@ -4,10 +4,6 @@ on:
     push:
       branches:
       - 'dev'
-  
-permissions:
-    id-token: write  
-    contents: read 
 
 jobs:
   build-and-deploy-job:
@@ -25,8 +21,8 @@ jobs:
        
            application_name: 'my-game-app'
            environment_name: 'My-game-app-env'
-           aws-access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           aws-secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
            version_label: ${{ github.sha }}
            region: eu-west-1
            deployment_package: game2048.zip
