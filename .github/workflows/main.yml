@@ -5,7 +5,7 @@ on:
     branches:
       - 'dev'
 permissions:
-  id-token: write   # Allow the workflow to request the JWT
+  id-token: write   
   contents: read 
 
 jobs:
@@ -49,6 +49,32 @@ jobs:
             --region eu-west-1
       
       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       # - name: Deploy to EB
       #   uses: einaregilsson/beanstalk-deploy@v22
       #   with:
@@ -75,35 +101,6 @@ jobs:
       #       --environment-name My-game-app-env \
       #       --version-label ${{ github.sha }} \
       #       --region eu-west-1
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
